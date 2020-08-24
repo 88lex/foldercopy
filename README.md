@@ -1,9 +1,8 @@
-### Foldercopy - quick copy utility for Google Team/Shared Drives with string matches, using rclone
+### Foldercopy - quick copy utility for Google Team/Shared Drives with string matches, using rclone (or lclone or gclone)
 
-- `folderlist` generates a static list of all folders in selected directories in Drive.
-- `foldercopy` copies folders matching any string to a destination folder using source-destination pairs in a set file.
-- `foldercopy2` copies folders matching any string to a folder you designate in the command line.
-- `foldercopy` and `foldercopy2` display a list of matching folders and require confirmation before copying (by default)
+  - `folderlist` generates a static list of all folders in selected directories in Drive.
+  - `foldercopy` copies folders matching any string to a destination folder using source-destination pairs in a set file.
+  - `foldercopy2` copies folders matching any string to a folder you designate in the command line.
 
 
 Syntax: 
@@ -20,4 +19,4 @@ Syntax:
 ```
   - `./folderlist tv` will generate a list of all folders in my_td:video , documentary and nature as well as a mapping of all folders to bak_td:. These lists are saved in `/src_folders` and `src_dest_folders` directories.
 
-
+  - `foldercopy` works with rclone, gclone and lclone (l3uddz's rclone_gclone fork). This can be set in the `config` file (default `clone="rclone"`)
