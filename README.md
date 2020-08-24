@@ -1,6 +1,6 @@
 ### Foldercopy - quick copy utility for Google Team/Shared Drives with string matches, using rclone (or lclone or gclone)
 
-  - `folderlist` generates a static list of all folders in selected directories in Drive.
+  - `folderlist` generates a static list of all folders in selected directories in Drive. folderlist must be run at least once before foldercopy
   - `foldercopy` copies folders matching any string to a destination folder using source-destination pairs in a set file.
   - `foldercopy2` copies folders matching any string to a folder you designate in the command line.
 
