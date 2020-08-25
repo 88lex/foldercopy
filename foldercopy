@@ -1,18 +1,42 @@
 #!/usr/bin/env bash
-
 source config
+for arg in "$@";do
+  case $arg in
+      -r|--rclone) clone="rclone"; shift ;;
+      -l|--lclone) clone="lclone"; shift ;;
+      -g|--gclone) clone="gclone"; shift ;;
+      -c|--copy)   action="copy" ; shift ;;
+      -m|--move)   action="move" ; shift ;;
+      -s|--sync)   action="sync" ; shift ;;
+      -a|--auto)   auto=true     ; shift ;;
+      -t|--test)   test=true     ; shift ;;
+      -d|--dest)   dest1="$2"    ; shift 2 ;;
+      -f|--flag)   flags+=("$1 "); shift 2 ;;
+      # *)           flags+=("$1 "); shift ;;
+  esac
+done
+
+if [ $test = true ];then echo "===RUNNING IN TEST MODE===";sleep 1;fi
 infile="$src_folders/src_$1"
 infile2="$src_dest_folders/src_dest_$1"
 shift
 filter=`echo "$@" | sed -r 's/ /.*/g'`
 src_list=`cat $infile | grep -i -E "$filter"`
 echo -e "$src_list"
-read -p "Copy these folders? y/n " resp
-if [ $resp != "y" ];then exit;fi
+if [ -z $auto ];then
+  read -p "Copy these folders? y/n " resp
+  if [ $resp != "y" ];then echo "Aborting, then exit";exit;fi
+fi
 
 cat $infile2 | grep -i -E "$filter" |\
 while IFS=$IFS1 read src dest; do
-  echo -e "\nCopying files from source ( $src ) to destination ( $dest )"
-  # echo -e "$clone copy $src $dest $flags"
-  "$clone" copy "$src" "$dest" $flags
+  if [ ! -z "$src" ];then
+    if [ ! -z "$dest1" ];then dest="$dest1/${src/*\//}";fi
+    echo -e "\nCopying files from source ( $src ) to destination ( $dest )"
+    if [ $test = true ];then
+      echo -e "DRY RUN: $clone $action $src $dest $flags"
+    else
+      set -x;"$clone" "$action" "$src" "$dest" $flags;set +x      
+    fi
+  fi
 done

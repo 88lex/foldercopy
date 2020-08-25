@@ -3,13 +3,18 @@ source config $@
 >$src_all;>$src_dest_all
 
 cat "$set_folder/$1" | while read src dest; do
-  src_norm=`echo $src | sed -E 's/[^[:alnum:]]/_/g'`
-  outfile="$src_folders/src_$src_norm";>$outfile
-  echo -e "Create list of source ($src) and dest ($dest) folders"
-  rclone tree --noindent --noreport --full-path -d --filter-from filter "$src" |\
-  sort|uniq|tee $outfile -a $src_all >/dev/null
-  cat $outfile | while read folder; do
-    echo -e "$src$folder$IFS1$dest$folder" >> $src_dest_all
-  done
-  rm $outfile
+  if [ ! -z "$src" ];then
+    src_norm=`echo $src | sed -E 's/[^[:alnum:]]/_/g'`
+    outfile="$src_folders/src_$src_norm";>$outfile
+    echo -e "Create list of source ($src) and dest ($dest) folders"
+    rclone tree --noindent --noreport --full-path -d --filter-from filter "$src" |\
+    sort|uniq|tee $outfile -a $src_all >/dev/null
+    cat $outfile | while read folder; do
+      echo -e "$src$folder$IFS1$dest$folder" >> $src_dest_all
+    done
+    rm $outfile
+  fi
 done
+
+for i in `ls $src_folders`;do sort -o "$src_folders/$i" "$src_folders/$i";done
+for j in `ls $src_dest_folders`;do sort -o "$src_dest_folders/$j" "$src_dest_folders/$j";done
