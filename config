@@ -3,9 +3,11 @@ action="copy"
 set_folder="sets"
 src_folders="src_folders"
 src_dest_folders="src_dest_folders"
+flags="-vP --drive-server-side-across-configs --transfers=8 --tpslimit 8 --tpslimit-burst 32"
+
+
 
 ### folder and parameter init
-flags="-vP --drive-server-side-across-configs --transfers=8 --fast-list"
 IFS1="|"
 mkdir -p $src_folders $src_dest_folders $set_folder backup/$(date +%u)/
 cp -r *_folders backup/$(date +%u)/

@@ -1,32 +1,13 @@
 #!/usr/bin/env bash
-
-source config
-for arg in "$@";do
-  case $arg in
-      -r|--rclone) pass+="-r "   ; shift ;;
-      -l|--lclone) pass+="-l "   ; shift ;;
-      -g|--gclone) pass+="-g "   ; shift ;;
-      -c|--copy)   pass+="-c "   ; shift ;;
-      -m|--move)   pass+="-m "   ; shift ;;
-      -s|--sync)   pass+="-s "   ; shift ;;
-      -a|--auto)   pass+="-a "   ; shift ;;
-      -t|--test)   pass+="-t "   ; shift ;;
-      -d|--dest)   pass+="-d $2 "; shift 2 ;;
-      # -f|--flag)   flags+="$1 "; shift 2 ;;
-      # *)           flags+=("$1 "); shift ;;
-  esac
-done
-
+# syntax `./fcomp setname1 setname2` creates a differential file in src_folders
+source config_init $@
+set $args
 outfile="$src_folders"/folders_in_"$1"_not_in_"$2"
 comm -23 "$src_folders"/src_"$1" "$src_folders"/src_"$2" | tee $outfile
 
-if [ ! -z "$pass" ];then
-  cat "$outfile" | while read filter;do
-    if [ ! -z $dest1 ];then
-      echo foldercopy -d "$dest1" "$1" "$filter"
-    else
-      # echo foldercopy $pass "$1" "$filter"
-      ./foldercopy $pass "$1" "$filter"
-    fi
-  done
+read -r -p "$action these folders? y/n " resp
+if [ $resp != "y" ];then 
+  echo "Exiting fcomp";exit
+else 
+  source listcopy "$outfile" "$1"
 fi

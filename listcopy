@@ -1,0 +1,9 @@
+#!/usr/bin/env bash
+# syntax: `./listcopy filter_file set_file` copies folder that match filters
+# in filter_file from source to destination in the set_file
+filter_file="$1"
+shift
+listcopy_args="$@"
+while IFS= read -r filter;do
+  source foldercopy -a "$listcopy_args" $filter
+done <$filter_file

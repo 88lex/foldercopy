@@ -1,0 +1,7 @@
+#!/usr/bin/env bash
+source config_init
+echo -e "\nChoose set to see source-destination folder pairs\n"
+select choice in `ls sets`;do
+  cat sets/$choice
+  exit
+done

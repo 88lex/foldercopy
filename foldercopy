@@ -1,42 +1,53 @@
 #!/usr/bin/env bash
-source config
-for arg in "$@";do
-  case $arg in
-      -r|--rclone) clone="rclone"; shift ;;
-      -l|--lclone) clone="lclone"; shift ;;
-      -g|--gclone) clone="gclone"; shift ;;
-      -c|--copy)   action="copy" ; shift ;;
-      -m|--move)   action="move" ; shift ;;
-      -s|--sync)   action="sync" ; shift ;;
-      -a|--auto)   auto=true     ; shift ;;
-      -t|--test)   test=true     ; shift ;;
-      -d|--dest)   dest1="$2"    ; shift 2 ;;
-      -f|--flag)   flags+=("$1 "); shift 2 ;;
-      # *)           flags+=("$1 "); shift ;;
-  esac
-done
 
-if [ $test = true ];then echo "===RUNNING IN TEST MODE===";sleep 1;fi
+source config_init $@
+set $args
+if [ $test ];then echo "===RUNNING IN TEST MODE===";fi
 infile="$src_folders/src_$1"
 infile2="$src_dest_folders/src_dest_$1"
 shift
-filter=`echo "$@" | sed -r 's/ /.*/g'`
-src_list=`cat $infile | grep -i -E "$filter"`
-echo -e "$src_list"
-if [ -z $auto ];then
-  read -p "Copy these folders? y/n " resp
-  if [ $resp != "y" ];then echo "Aborting, then exit";exit;fi
-fi
+raw_filter="$@"
 
-cat $infile2 | grep -i -E "$filter" |\
-while IFS=$IFS1 read src dest; do
-  if [ ! -z "$src" ];then
-    if [ ! -z "$dest1" ];then dest="$dest1/${src/*\//}";fi
-    echo -e "\nCopying files from source ( $src ) to destination ( $dest )"
-    if [ $test = true ];then
-      echo -e "DRY RUN: $clone $action $src $dest $flags"
-    else
-      set -x;"$clone" "$action" "$src" "$dest" $flags;set +x      
-    fi
+check_auto ()
+{ if [ -z $auto ];then
+    read -r -p "$action these folders (y/n) or change filter (c)? y/n/c " resp
+    # if [ $resp == "s" ];then
+    #   >tmp_list
+    #   echo "$src_list" |\
+    #   while read FOO; do
+    #    echo -e "\"$FOO\"">>tmp_list
+    #   done 
+    #   select choice in `cat tmp_list`;do
+    #     src_list=$choice;done
+    if [ $resp == "c" ];then
+      read -r -p "Change filter to: " raw_filter
+      filter_list
+    elif [ $resp != "y" ];then echo "Exiting foldercopy";exit;fi
   fi
-done
+}
+
+filter_list ()
+{ filter=`echo "$raw_filter" | sed -r 's/ /.*/g'`
+  src_list=`cat $infile | grep -i -E "$filter"`
+  echo -e "$src_list"
+  check_auto
+}
+filter_list
+
+run_foldercopy ()
+{ cat $infile2 | grep -i -E "$filter" |\
+  while IFS=$IFS1 read src dest; do
+    if [ ! -z "$src" ];then
+      if [ ! -z "$dest_" ];then dest="$dest_/${src/*\//}";fi
+        if [ "$action" == "backend shortcut" ];then 
+          src1=${src#*:};src="${src%:*}:"
+          dest1=${dest#*:};dest="-o target=${dest%:*}:";fi
+      if [ "$action" == "backend shortcut" ];then
+        set -x;$test "$clone" $action "$src" "$src1" $dest "$dest1" $flags;set +x
+      else
+        set -x;$test "$clone" $action "$src" "$dest" $flags;set +x
+      fi
+    fi
+  done
+}
+run_foldercopy

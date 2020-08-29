@@ -6,12 +6,15 @@ cat "$set_folder/$1" | while read src dest; do
   if [ ! -z "$src" ];then
     src_norm=`echo $src | sed -E 's/[^[:alnum:]]/_/g'`
     outfile="$src_folders/src_$src_norm";>$outfile
-    echo -e "Create list of source ($src) and dest ($dest) folders"
+    echo -e "Creating list of source ($src) folders"
     rclone tree --noindent --noreport --full-path -d --filter-from filter "$src" |\
     sort|uniq|tee $outfile -a $src_all >/dev/null
-    cat $outfile | while read folder; do
-      echo -e "$src$folder$IFS1$dest$folder" >> $src_dest_all
-    done
+    if [ ! -z "$dest" ];then
+      echo -e "Creating list of source ($src) and dest ($dest) folders"
+      cat $outfile | while read folder; do
+        echo -e "$src$folder$IFS1$dest$folder" >> $src_dest_all
+      done
+    fi
     rm $outfile
   fi
 done
