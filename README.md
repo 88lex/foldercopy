@@ -49,3 +49,11 @@ Syntax:
   - `foldercopy` works with rclone, gclone and lclone (l3uddz's rclone_gclone fork). This can be set in the `config` file or with flags
   - `./listcopy 
   - `./fcomp set1 set2` creates a file in src_folders listing folders in set1 that are not in set2. `fcomp` will then ask if you want to copy (or sync or move) those folders.
+
+
+HINTS:
+- searches can use partial and multiple filters
+  - e.g You have a folderlist called `videos` which includes a folders called /holiday/2014/italy and /holiday/2015/japan
+  - `./fcopy videos hol 14` will find `/holiday/2014/italy`
+  - `./fcopy videos 201` will find `/holiday/2014/italy` and `/holiday/2015/japan`
+  - `./fcopy videos 2014 holiday` will find nothing, as the holiday precedes 2014 in the string
