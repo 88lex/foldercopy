@@ -1,11 +1,11 @@
 ### Foldercopy - quick copy utility for Google Team/Shared Drives with string matches, using rclone (or lclone or gclone)
 
-ADDED: Copy shortcuts for folders with `./foldercopy --shcut` or `./shcut`
+  - `foldercopy` copies folders matching any `filter`
 
-NOTE: `foldercopy` requires a local list of folders. Create a set in `/sets/` and run `./folderlist set_name` to generate / update your list(s). 
+  - foldercopy also copies shortcuts for folders using `./shcut set_name filter`
 
-  - `folderlist` generates a static list of folders in selected directories. folderlist must be run at least once before foldercopy. The file is stored locally and can be updated as often as needed.
-  - `foldercopy` copies folders matching any `filter`. Copied to a destination folder from a set file.
+NOTE: `foldercopy` requires a local list of folders. Create a set in `/sets/` and run `./folderlist set_name` to generate / update your list(s). The file is stored in `/src_folders` and can be updated as often as needed.
+
 
 Syntax: 
   - `./folderlist tv` generates a file listing all folders in the source remotes in the set file `tv`. Subsequent searches are instant and copying can begin without re-scanning the remote.
