@@ -7,19 +7,19 @@ infile="$src_folders/src_$1"
 infile2="$src_dest_folders/src_dest_$1"
 shift
 raw_filter="$@"
+if [ ! -z $update ];then source folderlist $set_name;fi
 
 check_auto ()
 { if [ -z $auto ];then
-    read -r -p "$action these folders (y/n) or change filter (c)? y/n/c " resp
-    # if [ $resp == "s" ];then
-    #   >tmp_list
-    #   echo "$src_list" |\
-    #   while read FOO; do
-    #    echo -e "\"$FOO\"">>tmp_list
-    #   done 
-    #   select choice in `cat tmp_list`;do
-    #     src_list=$choice;done
-    if [ $resp == "c" ];then
+    read -r -p "Run $action for all folders (y/n); select one (s); change filter (c)? y/n/s/c " resp
+    if [ $resp == "s" ];then OLDIFS=$IFS;IFS=$'\n'
+      select choice in $(echo -e "$src_list");do
+        raw_filter="$choice"
+        IFS=$OLDIFS
+        filter_list
+        break
+      done      
+    elif [ $resp == "c" ];then
       read -r -p "Change filter to: " raw_filter
       filter_list
     elif [ $resp != "y" ];then echo "Exiting foldercopy";exit;fi
@@ -29,10 +29,13 @@ check_auto ()
 filter_list ()
 { filter=`echo "$raw_filter" | sed -r 's/ /.*/g'`
   src_list=`cat $infile | grep -i -E "$filter"`
-  echo -e "$src_list"
-  check_auto
+  if [ -z "$src_list" ];then
+    echo -e "The filter \"$raw_filter\" does not match any folders in $infile. Try again"
+  else
+    echo -e "The filter matches:\n$src_list"
+    check_auto
+  fi
 }
-filter_list
 
 run_foldercopy ()
 { cat $infile2 | grep -i -E "$filter" |\
@@ -50,4 +53,6 @@ run_foldercopy ()
     fi
   done
 }
+
+filter_list
 run_foldercopy

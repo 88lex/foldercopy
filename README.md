@@ -10,8 +10,13 @@ Syntax:
   - `./foldercopy tv Bananas` will copy any folders that include the string `Bananas` (ignore caps) between folders defined in the set file called `tv`
   - `./foldercopy tv Bananas 2007` will copy any folders that include the strings `Bananas` and `2007`
   - `./foldercopy -d my_remote:comedy tv Bananas` will copy any folders that include the string `Bananas` to the `my_remote:comedy` folder
+  - After running a command foldercopy will give you a list and a choice
+    - `y` to copy/sync/move all folders listed.
+    - `n` to abort
+    - `s` to select one of the folders shown in the list
+    - `c` to change or refine the filter 
 
-  - Folder `sets` map source and destination pairs in files in the `/sets` folder. For example a file `/sets/tv` could contain
+  - Folder `sets` map the source and destination pairs in files in the `/sets` folder. These pairs can be as simple or complex as you like. For example a file `/sets/tv` could contain
 ```
         my_td:video         bak_td:video
         my_td:documentary   bak_td:documentary
@@ -35,6 +40,7 @@ Syntax:
       -t|--test)              => print command with executing
       -d|--dest)              => set destination manually (e.g. -d remote:folder)
       -f|--flag)              => add a flag to rclone
+      -u|--update)            => update folderlist, then run filter and other commands
 ```
   - `foldercopy` works with rclone, gclone and lclone (l3uddz's rclone_gclone fork). This can be set in the `config` file or with flags
   - `./listcopy 
