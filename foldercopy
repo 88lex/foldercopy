@@ -22,7 +22,7 @@ check_auto ()
     elif [ $resp == "c" ];then
       read -r -p "Change filter to: " raw_filter
       filter_list
-    elif [ $resp == "y" ];then continue
+    elif [ $resp == "y" ];then echo
     else exit;fi
   fi
 }

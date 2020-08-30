@@ -1,9 +1,9 @@
-clone="rclone"
+clone="lclone"
 action="copy"
 set_folder="sets"
 src_folders="src_folders"
 src_dest_folders="src_dest_folders"
-flags="--drive-server-side-across-configs --transfers=8 --tpslimit=8 --tpslimit-burst=32 -vP"
+flags="--drive-server-side-across-configs --transfers=8 --tpslimit=5 --tpslimit-burst=32 -vP --fast-list"
 
 
 

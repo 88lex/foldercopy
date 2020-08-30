@@ -12,6 +12,8 @@ Syntax:
   - `./foldercopy tv Bananas` will copy any folders that include the string `Bananas` (ignore caps) between folders defined in the set file called `tv`
   - `./foldercopy tv Bananas 2007` will copy any folders that include the strings `Bananas` and `2007`
   - `./foldercopy -d my_remote:comedy tv Bananas` will copy any folders that include the string `Bananas` to the `my_remote:comedy` folder
+  - flags must come before the set name. `./foldercopy tv Bananas -d my_remote:comedy` will NOT work 
+
   - After running a command foldercopy will give you a list and a choice
     - `y` to copy/sync/move all folders listed.
     - `n` to abort
@@ -41,7 +43,7 @@ Syntax:
       -a|--auto)              => copy without user confirmation    
       -t|--test)              => print command with executing
       -d|--dest)              => set destination manually (e.g. -d remote:folder)
-      -f|--flag)              => add a flag to rclone
+      -f|--flag)              => add a flag to rclone. Each flag requires -f: `-f --flag1 -f flag2`
       -u|--update)            => update folderlist, then run filter and other commands
 ```
   - `foldercopy` works with rclone, gclone and lclone (l3uddz's rclone_gclone fork). This can be set in the `config` file or with flags
