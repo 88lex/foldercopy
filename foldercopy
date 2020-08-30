@@ -11,7 +11,7 @@ if [ ! -z $update ];then source folderlist $set_name;fi
 
 check_auto ()
 { if [ -z $auto ];then
-    read -r -p "Run $action for all folders (y/n); select one (s); change filter (c)? y/n/s/c " resp
+    read -r -p "Run $action for all folders (y); select one (s); change filter (c); exit (e)? y/s/c/e: " resp
     if [ $resp == "s" ];then OLDIFS=$IFS;IFS=$'\n'
       select choice in $(echo -e "$src_list");do
         raw_filter="$choice"
@@ -22,7 +22,8 @@ check_auto ()
     elif [ $resp == "c" ];then
       read -r -p "Change filter to: " raw_filter
       filter_list
-    elif [ $resp != "y" ];then echo "Exiting foldercopy";exit;fi
+    elif [ $resp == "y" ];then continue
+    else exit;fi
   fi
 }
 
@@ -32,7 +33,7 @@ filter_list ()
   if [ -z "$src_list" ];then
     echo -e "The filter \"$raw_filter\" does not match any folders in $infile. Try again"
   else
-    echo -e "The filter matches:\n$src_list"
+    echo -e "The filter matches:\n$src_list\n\n`echo "$src_list" | wc -l` folder(s) match filter\n"
     check_auto
   fi
 }

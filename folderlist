@@ -21,3 +21,4 @@ done
 
 for i in `ls $src_folders`;do sort -o "$src_folders/$i" "$src_folders/$i";done
 for j in `ls $src_dest_folders`;do sort -o "$src_dest_folders/$j" "$src_dest_folders/$j";done
+echo -e "`cat $src_all|wc -l` folders in $src_all set"
