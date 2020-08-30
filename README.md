@@ -2,6 +2,8 @@
 
 ADDED: Copy shortcuts for folders with `./foldercopy --shcut` or `./shcut`
 
+NOTE: `foldercopy` requires a local list of folders. Create a set in `/sets/` and run `./folderlist set_name` to generate / update your list(s). 
+
   - `folderlist` generates a static list of folders in selected directories. folderlist must be run at least once before foldercopy. The file is stored locally and can be updated as often as needed.
   - `foldercopy` copies folders matching any `filter`. Copied to a destination folder from a set file.
 
@@ -27,16 +29,16 @@ Syntax:
   - Many settings use flags, and some have short command alternatives. Most short commands accept flags:
 ```
       FLAG      OR   COMMAND
-      -c|--copy)     fcopy    => copy
+      -c|--copy)     fcopy    => copy (This is the default action)
       -m|--move)     fmove    => move
       -s|--sync)     fsync    => sync
       -z|--shcut)    shcut    => create shortcuts of the source folders
                      fcomp    => compare two folder lists
                      listsets => shows all of your set files. Select to print contentss
-      -r|--rclone             => use rclone
+      -r|--rclone             => use rclone (This is the default app for copying)
       -l|--lclone)            => use lclone
       -g|--gclone)            => use gclone
-      -a|--auto)              => copy without user confirmation     
+      -a|--auto)              => copy without user confirmation    
       -t|--test)              => print command with executing
       -d|--dest)              => set destination manually (e.g. -d remote:folder)
       -f|--flag)              => add a flag to rclone
