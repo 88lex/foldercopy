@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# syntax: `./listcopy filter_file set_file` copies folder that match filters
+# syntax: `./listshcut filter_file set_file` copies folder that match filters
 # in filter_file from source to destination in the set_file
 filter_file="$1"
 shift
